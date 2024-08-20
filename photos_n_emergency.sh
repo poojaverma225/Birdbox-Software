@@ -4,8 +4,8 @@ OUTPUT_DIR="Birdbox v1:album/Birdbox Version 1 at Lake Elizabeth"
 TEMP_THRESHOLD_HIGH=70000  # 70°C (shutdown threshold)
 TEMP_THRESHOLD_RESUME=60000  # 60°C (resume photo taking)
 TEMP_THRESHOLD_STOP=65000  # 65°C (stop photo taking)
-VOLTAGE_THRESHOLD=0.7  # adjust this value to your desired threshold
-
+VOLTAGE_THRESHOLD=0.7  
+#testing if its super duper high
 while true
 do
   temp=$(cat /sys/class/thermal/thermal_zone0/temp)
@@ -17,7 +17,7 @@ do
     sleep 15
     sudo systemctl poweroff -f
   fi
-
+#testing if its a little high
   if [ $temp -gt $TEMP_THRESHOLD_STOP ]; then
     echo "Raspberry pi is overheating! Stopping photo taking."
     # Stop taking photos
@@ -31,7 +31,7 @@ do
     echo "Temperature has dropped. Resuming photo taking."
     echo "Temperature: $(echo "scale=2; $temp / 1000" | bc)°C" | mail -s "RASP PI RESUMED" birdboxers11124@gmail.com
   fi
-
+#this probably wont happen butttt
   if [ $(echo "$voltage < $VOLTAGE_THRESHOLD" | bc) -eq 1 ]; then
     echo "Voltage is low! Shutting down."
     echo "Voltage is $voltage" | mail -s "RASP PI EMERGENCY" birdboxers11124@gmail.com
@@ -39,7 +39,7 @@ do
     sudo systemctl poweroff -f
   fi
 
-  # Take photos
+  # Take photos and send them to pcloud album using rclone :D
   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
   FILE_NAME="${TIMESTAMP}.jpg"
   sudo libcamera-still -o "${FILE_NAME}"
