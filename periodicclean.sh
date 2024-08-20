@@ -13,7 +13,7 @@ sudo apt autoclean
 sudo apt-get clean
 
 sudo rm -rf /var/log*.gz
-
+#cleaning disk space :D
 THRESHOLD=80
 CURRENT_USAGE=$(df -h / | awk 'NR==2 {print $5}' | cut -d'%' -f1)
 
