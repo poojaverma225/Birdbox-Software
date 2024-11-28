@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#SETS THE output to our album :)
 OUTPUT_DIR="Birdbox v1:album/Birdbox Version 1 at Lake Elizabeth"
 TEMP_THRESHOLD_HIGH=70000  # 70°C (shutdown threshold)
 TEMP_THRESHOLD_RESUME=60000  # 60°C (resume photo taking)
@@ -40,13 +40,21 @@ do
   fi
 
   # Take photos and send them to pcloud album using rclone :D
+#year, month, day, hour, minute, second; the percent helps the system get them and dollar is similar
   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+#every file is named diff that way
   FILE_NAME="${TIMESTAMP}.jpg"
+#sudo = superuser, libcamera takes photos, o = output file name
   sudo libcamera-still -o "${FILE_NAME}"
+#copys the photo itp othe rclone 
   rclone copy "/home/birdbox/${FILE_NAME}" "Birdbox v1:album/Birdbox Version 1 at Lake Elizabeth"
-  if [ $? -eq 0 ]; then
+  
+#if the exit status of the last command was successful, than remove the file from the local directory 
+#if tests for a certain condition
+if [ $? -eq 0 ]; then
     sudo rm "/home/birdbox/${FILE_NAME}"
   else
+#If not, email us that it didnt work
     echo "oopsies floopsies"
   fi
 
